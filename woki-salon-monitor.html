@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WOKI - Salon Monitor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Work Sans', sans-serif; }
+        .alert-pulse {
+            box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex h-screen flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">restaurant_menu</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">WOKI Gastronomy</h1>
+</div>
+<div class="hidden md:flex items-center gap-1 bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+<label class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-slate-400">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm pl-10 pr-4 py-2 w-64 placeholder:text-slate-400" placeholder="Search tables or staff..." type="text"/>
+</label>
+</div>
+</div>
+<nav class="flex items-center gap-6">
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Dashboard</a>
+<a class="text-sm font-bold text-primary border-b-2 border-primary pb-1" href="#">Salon Monitor</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Menu</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Stock</a>
+<a class="text-sm font-medium text-slate-500 hover:text-primary transition-colors" href="#">Staff</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center overflow-hidden border border-primary/30">
+<img alt="User Profile Avatar" class="h-full w-full object-cover" data-alt="Professional profile headshot of a restaurant manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABVZG9h_bEX7fD_Mz3RKfQ0arCKZ_oRfIz_URiuxMTEtPMMC9JbMdKK1bhk4YwwEtx0UE9vAfN56AA1dt5ytNL3cOhGgNE0m9fC0vPlvah12TRSHKRB5lqGI2UIXefRzZ-D7Gb0H5GIQ3QH5hsb-c-_9bNkTKimjb-aRKNaSXI5u-u55fhTAzPAWVMCzbwOk0jPqGGmaQv9q_s7ewVrPVvyjMZOdfwD0w8YucXMr6lJ_fkmxWc8Cq17VC_t6HfyyNHuqa1_yIeb6U"/>
+</div>
+</div>
+</header>
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Side: Table Layout Area -->
+<div class="flex flex-1 flex-col p-6 overflow-y-auto">
+<div class="flex flex-col gap-3 mb-6">
+<!-- Fila superior: salones + leyenda -->
+<div class="flex items-center justify-between">
+  <div class="flex items-center gap-2 flex-wrap">
+    <!-- Salones físicos -->
+    <div class="flex gap-2" id="salones-nav">
+      <button id="btn-salon-main"    onclick="seleccionarSalon('main')"    class="px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold shadow-sm transition-all">Salón Principal</button>
+      <button id="btn-salon-terrace" onclick="seleccionarSalon('terrace')" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all">Terraza</button>
+      <button id="btn-salon-vip"     onclick="seleccionarSalon('vip')"     class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all">VIP Lounge</button>
+      <button id="btn-salon-bar"     onclick="seleccionarSalon('bar')"     class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all">Bar Area</button>
+    </div>
+    <!-- Separador visual -->
+    <div class="w-px h-6 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+    <!-- Zona: Para llevar (NO es un salón) -->
+    <button id="btn-zona-takeaway" onclick="seleccionarZona('takeaway')" class="px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-orange-300 dark:border-orange-700 text-sm font-semibold hover:bg-orange-50 dark:hover:bg-slate-700 text-orange-600 dark:text-orange-400 transition-all flex items-center gap-1.5">
+      <span class="material-symbols-outlined text-base leading-none">shopping_bag</span>
+      Para llevar
+    </button>
+  </div>
+  <div class="flex items-center gap-6 text-xs font-medium uppercase tracking-wider text-slate-500">
+    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-slate-300"></span> Libre</div>
+    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary"></span> Ocupada</div>
+    <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-amber-400"></span> En curso</div>
+  </div>
+</div>
+<!-- Fila inferior: badge de contexto activo -->
+<div>
+  <span id="context-badge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200">Salón: Salón Principal</span>
+</div>
+</div>
+<!-- Interactive Table Grid -->
+<div id="table-grid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+<!-- Las mesas se generan por JavaScript según salonActivo -->
+</div>
+<!-- Panel "Para llevar" — visible solo cuando zonaActiva === 'takeaway' -->
+<div id="takeaway-panel" style="display:none;">
+<!-- Contenido generado por JS -->
+</div>
+</div>
+<!-- Right Sidebar: Table Details -->
+<aside class="w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 flex flex-col">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between mb-2">
+<h2 class="text-2xl font-bold">Table T4</h2>
+<span class="px-2 py-1 rounded bg-red-100 text-red-700 text-[10px] font-bold uppercase">Critical Delay</span>
+</div>
+<p class="text-sm text-slate-500">Section: Main Hall • 4 Guests</p>
+</div>
+<div class="flex-1 overflow-y-auto p-6">
+<div class="space-y-6">
+<!-- Order Status -->
+<div>
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Current Status</h3>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="text-sm">Time Elapsed:</span>
+<span class="text-sm font-bold text-red-600">14m 10s</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm">Assigned Staff:</span>
+<span class="text-sm font-medium">Marco V.</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm">Order Phase:</span>
+<span class="text-sm font-medium">Waiting for Main</span>
+</div>
+</div>
+</div>
+<!-- Active Orders List -->
+<div>
+<h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Active Order items</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between group">
+<div>
+<p class="text-sm font-semibold">Truffle Tagliatelle</p>
+<p class="text-xs text-slate-400">Main • Ordered 15m ago</p>
+</div>
+<span class="text-sm font-bold">$24.00</span>
+</div>
+<div class="flex items-center justify-between group">
+<div>
+<p class="text-sm font-semibold">Wagyu Beef Burger</p>
+<p class="text-xs text-slate-400">Main • Ordered 15m ago</p>
+</div>
+<span class="text-sm font-bold">$28.00</span>
+</div>
+<div class="flex items-center justify-between group opacity-50">
+<div>
+<p class="text-sm font-semibold">Red Wine (Glass)</p>
+<p class="text-xs text-slate-400">Served</p>
+</div>
+<span class="text-sm font-bold">$12.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Footer -->
+<div class="p-6 bg-slate-50 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 space-y-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-base font-medium">Subtotal</span>
+<span class="text-xl font-bold">$64.00</span>
+</div>
+<button class="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-primary/90 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">receipt_long</span>
+                        Print Bill
+                    </button>
+<button class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-bold py-3 rounded-lg hover:bg-slate-50 transition-all">
+                        Edit Order
+                    </button>
+</div>
+</aside>
+</main>
+<!-- Status Bar -->
+<footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-6 py-2 flex items-center justify-between text-xs text-slate-500">
+<div class="flex gap-4">
+<span>System Online</span>
+<span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-500"></span> POS Connected</span>
+</div>
+<div>
+                Tuesday, Oct 24 • 19:42 PM
+            </div>
+</footer>
+</div>
+<script>
+// ─── Estado de navegación ────────────────────────────────────────────────────
+const SALONES = [
+  { id: 'main',    label: 'Salón Principal' },
+  { id: 'terrace', label: 'Terraza'         },
+  { id: 'vip',     label: 'VIP Lounge'      },
+  { id: 'bar',     label: 'Bar Area'        },
+];
+
+// salonActivo: salón físico seleccionado (nunca null)
+// zonaActiva:  zona especial activa ('takeaway' | null)
+// Invariante: son INDEPENDIENTES. zonaActiva no reemplaza salonActivo.
+let salonActivo = 'main';
+let zonaActiva  = null;
+
+// ─── Datos de mesas por salón ────────────────────────────────────────────────
+const MESAS_POR_SALON = {
+  main:    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+  terrace: [13, 14, 15, 16, 17, 18],
+  vip:     [19, 20, 21, 22],
+  bar:     [23, 24, 25, 26, 27, 28],
+};
+
+const ESTADOS_MESA = {
+  1:  { label: 'Disponible',      timer: null,    color: 'gray'  },
+  2:  { label: 'Ocupada',         timer: '0:45',  color: 'blue'  },
+  3:  { label: 'Por cobrar',      timer: '6:20',  color: 'amber' },
+  4:  { label: 'Demora · alerta', timer: '14:10', color: 'red'   },
+  5:  { label: 'Nuevo ingreso',   timer: '0:12',  color: 'blue'  },
+  6:  { label: 'Disponible',      timer: null,    color: 'gray'  },
+  7:  { label: 'Disponible',      timer: null,    color: 'gray'  },
+  8:  { label: 'Plato principal', timer: '5:15',  color: 'blue'  },
+  9:  { label: 'Reserva 19:00',   timer: null,    color: 'gray'  },
+  10: { label: 'Checkout',        timer: '7:45',  color: 'amber' },
+  11: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  12: { label: 'Demora cocina',   timer: '22:30', color: 'red'   },
+  13: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  14: { label: 'Ocupada',         timer: '3:10',  color: 'blue'  },
+  15: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  16: { label: 'En espera',       timer: '5:00',  color: 'amber' },
+  17: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  18: { label: 'Demora · alerta', timer: '15:00', color: 'red'   },
+  19: { label: 'Ocupada',         timer: '1:20',  color: 'blue'  },
+  20: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  21: { label: 'Plato principal', timer: '8:00',  color: 'blue'  },
+  22: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  23: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  24: { label: 'Ocupada',         timer: '2:00',  color: 'blue'  },
+  25: { label: 'Disponible',      timer: null,    color: 'gray'  },
+  26: { label: 'Demora · alerta', timer: '13:00', color: 'red'   },
+  27: { label: 'Ocupada',         timer: '4:30',  color: 'blue'  },
+  28: { label: 'Disponible',      timer: null,    color: 'gray'  },
+};
+
+// ─── Pedidos takeaway demo ────────────────────────────────────────────────────
+const TAKEAWAY_DEMO = [
+  { id: 'TK-001', cliente: 'Juan García',  items: ['Café con Leche x2', 'Medialuna x4'],    total: 5600, estado: 'listo',      tiempo: '2:10' },
+  { id: 'TK-002', cliente: 'María López',  items: ['Cappuccino', 'Brownie'],                total: 2500, estado: 'preparando', tiempo: '0:45' },
+  { id: 'TK-003', cliente: 'Carlos Ruiz',  items: ['Jugo Naranja x2', 'Tostado Completo'], total: 3700, estado: 'pendiente',  tiempo: null   },
+  { id: 'TK-004', cliente: 'Ana Martínez', items: ['Cheesecake x2'],                       total: 3000, estado: 'listo',      tiempo: '5:30' },
+];
+
+// ─── Acciones ─────────────────────────────────────────────────────────────────
+
+/**
+ * Seleccionar un salón físico.
+ * - Activa ese salón
+ * - LIMPIA zonaActiva → la vista vuelve al mapa de mesas
+ */
+function seleccionarSalon(id) {
+  salonActivo = id;
+  zonaActiva  = null;   // cambiar de salón limpia la zona
+  render();
+}
+
+/**
+ * Seleccionar una zona especial (ej: 'takeaway').
+ * - Activa la zona
+ * - NO modifica salonActivo → los salones siguen intactos
+ */
+function seleccionarZona(zona) {
+  zonaActiva = zona;
+  // salonActivo permanece sin cambios
+  render();
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+
+function render() {
+  renderNav();
+  renderBadge();
+  renderContent();
+}
+
+function renderNav() {
+  SALONES.forEach(function(s) {
+    const btn = document.getElementById('btn-salon-' + s.id);
+    if (!btn) return;
+    const activo = zonaActiva === null && salonActivo === s.id;
+    btn.className = activo
+      ? 'px-4 py-2 rounded-lg bg-primary text-white text-sm font-semibold shadow-sm transition-all'
+      : 'px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition-all';
+  });
+
+  const btnTakeaway = document.getElementById('btn-zona-takeaway');
+  if (btnTakeaway) {
+    btnTakeaway.className = zonaActiva === 'takeaway'
+      ? 'px-4 py-2 rounded-lg bg-orange-500 text-white text-sm font-semibold shadow-sm transition-all flex items-center gap-1.5'
+      : 'px-4 py-2 rounded-lg bg-white dark:bg-slate-800 border border-orange-300 dark:border-orange-700 text-sm font-semibold hover:bg-orange-50 dark:hover:bg-slate-700 text-orange-600 dark:text-orange-400 transition-all flex items-center gap-1.5';
+  }
+}
+
+function renderBadge() {
+  const badge = document.getElementById('context-badge');
+  if (!badge) return;
+  if (zonaActiva === 'takeaway') {
+    badge.textContent = 'Zona: Para llevar';
+    badge.className   = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700 border border-orange-200';
+  } else {
+    const salon = SALONES.find(function(s) { return s.id === salonActivo; });
+    badge.textContent = 'Salón: ' + (salon ? salon.label : '');
+    badge.className   = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200';
+  }
+}
+
+function renderContent() {
+  const grid  = document.getElementById('table-grid');
+  const panel = document.getElementById('takeaway-panel');
+  if (!grid || !panel) return;
+
+  if (zonaActiva === 'takeaway') {
+    grid.style.display  = 'none';
+    panel.style.display = 'block';
+    renderTakeawayPanel();
+  } else {
+    grid.style.display  = 'grid';
+    panel.style.display = 'none';
+    renderTableGrid();
+  }
+}
+
+// ─── Render: grilla de mesas ──────────────────────────────────────────────────
+
+function colorClasses(color) {
+  const map = {
+    gray:  {
+      border: 'border border-slate-200 dark:border-slate-800',
+      circle: 'bg-slate-100 dark:bg-slate-800 border-4 border-slate-200 dark:border-slate-700',
+      text:   'text-slate-500',
+      label:  'text-slate-400 font-medium',
+      extra:  '',
+    },
+    blue:  {
+      border: 'border-2 border-primary',
+      circle: 'bg-primary/10 border-4 border-primary',
+      text:   'text-primary',
+      label:  'text-primary font-bold',
+      extra:  'shadow-md',
+    },
+    amber: {
+      border: 'border-2 border-amber-400',
+      circle: 'bg-amber-50 border-4 border-amber-400',
+      text:   'text-amber-600',
+      label:  'text-amber-600 font-bold',
+      extra:  'shadow-md',
+    },
+    red:   {
+      border: 'border-2 border-red-500 alert-pulse',
+      circle: 'bg-red-50 border-4 border-red-500',
+      text:   'text-red-600',
+      label:  'text-red-600 font-bold uppercase tracking-tighter',
+      extra:  'shadow-lg',
+    },
+  };
+  return map[color] || map.gray;
+}
+
+function timerBadgeHtml(timer, color) {
+  if (!timer) return '';
+  var bg   = color === 'red' ? 'bg-red-100 text-red-700' : color === 'amber' ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700';
+  var icon = color === 'red' ? 'error' : 'timer';
+  return '<div class="absolute top-2 right-2 flex items-center gap-1 ' + bg + ' px-1.5 py-0.5 rounded text-[10px] font-bold"><span class="material-symbols-outlined text-[12px] fill-1">' + icon + '</span> ' + timer + '</div>';
+}
+
+function renderTableGrid() {
+  var grid  = document.getElementById('table-grid');
+  if (!grid) return;
+  var mesas = MESAS_POR_SALON[salonActivo] || [];
+  grid.innerHTML = mesas.map(function(num) {
+    var data = ESTADOS_MESA[num] || { label: 'Disponible', timer: null, color: 'gray' };
+    var c    = colorClasses(data.color);
+    return '<div class="group relative bg-white dark:bg-slate-900 ' + c.border + ' ' + c.extra + ' rounded-xl p-4 flex flex-col items-center justify-center aspect-square cursor-pointer hover:border-primary transition-all shadow-sm">'
+      + timerBadgeHtml(data.timer, data.color)
+      + '<div class="w-16 h-16 rounded-full ' + c.circle + ' flex items-center justify-center mb-3">'
+      + '<span class="text-lg font-bold ' + c.text + '">M' + num + '</span>'
+      + '</div>'
+      + '<span class="text-xs ' + c.label + '">' + data.label + '</span>'
+      + '</div>';
+  }).join('');
+}
+
+// ─── Render: panel Para llevar ────────────────────────────────────────────────
+
+function takeawayStatusInfo(estado) {
+  var map = {
+    listo:      { dot: 'bg-green-500',  badge: 'bg-green-100 text-green-700',  label: 'Listo para retirar' },
+    preparando: { dot: 'bg-amber-400',  badge: 'bg-amber-100 text-amber-700',  label: 'En preparación'     },
+    pendiente:  { dot: 'bg-slate-400',  badge: 'bg-slate-100 text-slate-600',  label: 'Por confirmar'      },
+  };
+  return map[estado] || map.pendiente;
+}
+
+function renderTakeawayPanel() {
+  var panel = document.getElementById('takeaway-panel');
+  if (!panel) return;
+
+  var cardsHtml = TAKEAWAY_DEMO.map(function(p) {
+    var st = takeawayStatusInfo(p.estado);
+    var tiempoHtml = p.tiempo
+      ? '<p class="text-xs text-slate-400 mt-1">' + p.tiempo + ' min</p>'
+      : '';
+    var itemsHtml = p.items.map(function(item) {
+      return '<p class="text-xs text-slate-600 dark:text-slate-300">• ' + item + '</p>';
+    }).join('');
+
+    return '<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 cursor-pointer hover:border-orange-400 transition-all shadow-sm">'
+      + '<div class="flex items-start justify-between mb-2">'
+      +   '<div class="flex items-center gap-2">'
+      +     '<span class="w-2.5 h-2.5 rounded-full ' + st.dot + ' mt-0.5 flex-shrink-0"></span>'
+      +     '<div>'
+      +       '<p class="text-sm font-bold text-slate-800 dark:text-white">' + p.cliente + '</p>'
+      +       '<p class="text-xs text-slate-500 font-mono">#' + p.id + '</p>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div class="text-right">'
+      +     '<span class="text-xs font-bold px-2 py-0.5 rounded-full ' + st.badge + '">' + st.label + '</span>'
+      +     tiempoHtml
+      +   '</div>'
+      + '</div>'
+      + '<div class="pl-4 space-y-0.5 mb-2">' + itemsHtml + '</div>'
+      + '<div class="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800">'
+      +   '<span class="text-xs text-slate-500">Total</span>'
+      +   '<span class="text-sm font-bold">$' + p.total.toLocaleString('es-AR') + '</span>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+
+  panel.innerHTML =
+    '<div class="mb-4">'
+    + '<h2 class="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">'
+    + '<span class="material-symbols-outlined text-orange-500">shopping_bag</span>Pedidos para llevar</h2>'
+    + '<p class="text-sm text-slate-500 mt-0.5">' + TAKEAWAY_DEMO.length + ' pedidos activos</p>'
+    + '</div>'
+    + '<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">' + cardsHtml + '</div>';
+}
+
+// ─── Inicializar ──────────────────────────────────────────────────────────────
+render();
+</script>
+</body></html>

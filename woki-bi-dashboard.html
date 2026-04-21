@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>WOKI Gastronomy - BI Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Work Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Work Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 antialiased">
+<div class="flex min-h-screen">
+<!-- Sidebar -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full">
+<div class="p-6 flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<div>
+<h1 class="text-slate-900 dark:text-white font-bold text-sm leading-none">WOKI</h1>
+<p class="text-slate-500 dark:text-slate-400 text-xs">Gastronomy BI</p>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/10 text-primary font-medium" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-display">BI Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">monitor</span>
+<span class="text-sm font-display">Salon Monitor</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<span class="text-sm font-display">Stock Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="text-sm font-display">Digital Menu</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+<div class="h-8 w-8 rounded-full bg-slate-300 overflow-hidden">
+<img class="h-full w-full object-cover" data-alt="User profile avatar of the manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjafm1D1tjI0miHA4SmXdGjryEwHSPm99YU1tnwN_pQqMFyDH-_u5r402ndBJEfYcSrf81boM6BXDy3gNjr5oGVRvdv7MKwXsd6A7hwpkbrACnnA_2iBGXROX6l2HRL7s4CfmakVl__RT6f-WCKmLRpq3x91NZ0-D3fwXEt7uXBZi1OMP5v6kkF3MJIdsZ-e3TPXJB2vND3l9ChBkfLAhJioBnGSZxa92XNxk9SiiGjkzLLwqHrHu_cjk6j-PBVXBeJVKbs0RxIm8"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-xs font-semibold truncate">Alex Manager</p>
+<p class="text-[10px] text-slate-500 truncate">Admin Access</p>
+</div>
+<span class="material-symbols-outlined text-slate-400 text-sm">settings</span>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 ml-64 p-8">
+<!-- Header -->
+<header class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Business Intelligence</h2>
+<p class="text-slate-500 dark:text-slate-400">Real-time performance metrics for today, Oct 24th.</p>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg bg-white dark:bg-slate-800 text-sm font-medium">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                    Last 30 Days
+                </button>
+<button class="bg-primary text-white px-6 py-2 rounded-lg text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">
+                    Export Report
+                </button>
+</div>
+</header>
+<!-- KPI Summary Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Sales</p>
+<span class="p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg material-symbols-outlined text-sm">payments</span>
+</div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white">$12,450.00</h3>
+<p class="text-green-600 dark:text-green-400 text-sm font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +12.5% <span class="text-slate-400 font-normal">vs last week</span>
+</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Average Ticket</p>
+<span class="p-2 bg-primary/10 text-primary rounded-lg material-symbols-outlined text-sm">receipt_long</span>
+</div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white">$42.50</h3>
+<p class="text-green-600 dark:text-green-400 text-sm font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_up</span> +3.2% <span class="text-slate-400 font-normal">avg. growth</span>
+</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Most Sold Item</p>
+<span class="p-2 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 rounded-lg material-symbols-outlined text-sm">star</span>
+</div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white">Classic Wok</h3>
+<p class="text-primary text-sm font-semibold mt-2 flex items-center gap-1">
+                    428 orders <span class="text-slate-400 font-normal">this period</span>
+</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">Low Rotation Items</p>
+<span class="p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg material-symbols-outlined text-sm">inventory</span>
+</div>
+<h3 class="text-2xl font-bold text-slate-900 dark:text-white">Spring Rolls</h3>
+<p class="text-red-600 dark:text-red-400 text-sm font-semibold mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">trending_down</span> -2.1% <span class="text-slate-400 font-normal">stock stagnant</span>
+</p>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Hourly Heat Map (Mock Visual) -->
+<div class="lg:col-span-2 bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-lg font-bold">Hourly Sales Volume</h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-[10px] text-slate-500"><div class="h-2 w-2 rounded-full bg-primary/20"></div> Low</span>
+<span class="flex items-center gap-1 text-[10px] text-slate-500"><div class="h-2 w-2 rounded-full bg-primary"></div> High</span>
+</div>
+</div>
+<div class="h-64 flex items-end justify-between gap-2 px-2">
+<!-- Bars -->
+<div class="flex-1 bg-primary/10 rounded-t h-[10%] group relative"><div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded">08:00</div></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[20%]"></div>
+<div class="flex-1 bg-primary/30 rounded-t h-[35%]"></div>
+<div class="flex-1 bg-primary/60 rounded-t h-[55%]"></div>
+<div class="flex-1 bg-primary/90 rounded-t h-[85%]"></div> <!-- Lunch Peak -->
+<div class="flex-1 bg-primary rounded-t h-[100%]"></div> <!-- Peak -->
+<div class="flex-1 bg-primary/70 rounded-t h-[65%]"></div>
+<div class="flex-1 bg-primary/40 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-primary/30 rounded-t h-[30%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[25%]"></div>
+<div class="flex-1 bg-primary/50 rounded-t h-[50%]"></div>
+<div class="flex-1 bg-primary/80 rounded-t h-[80%]"></div> <!-- Dinner Peak -->
+<div class="flex-1 bg-primary/95 rounded-t h-[95%]"></div>
+<div class="flex-1 bg-primary/60 rounded-t h-[60%]"></div>
+<div class="flex-1 bg-primary/30 rounded-t h-[30%]"></div>
+</div>
+<div class="flex justify-between mt-4 text-[10px] text-slate-400 font-medium border-t border-slate-100 dark:border-slate-800 pt-2">
+<span>08:00 AM</span>
+<span>12:00 PM</span>
+<span>04:00 PM</span>
+<span>08:00 PM</span>
+<span>11:00 PM</span>
+</div>
+</div>
+<!-- Golden Ranking Section -->
+<div class="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-yellow-500">military_tech</span>
+<h3 class="text-lg font-bold">Golden Ranking</h3>
+</div>
+<div class="space-y-6">
+<!-- Item 1 -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-semibold">Signature Ramen</span>
+<span class="text-xs font-bold text-primary">$4,200 Profit</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 95%;"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-1">95% Profitability Index</p>
+</div>
+<!-- Item 2 -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-semibold">Truffle Dumplings</span>
+<span class="text-xs font-bold text-primary">$3,850 Profit</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary/80 h-full rounded-full" style="width: 88%;"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-1">88% Profitability Index</p>
+</div>
+<!-- Item 3 -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-semibold">Salmon Sashimi Bowl</span>
+<span class="text-xs font-bold text-primary">$3,100 Profit</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary/70 h-full rounded-full" style="width: 72%;"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-1">72% Profitability Index</p>
+</div>
+<!-- Item 4 -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-semibold">Classic Wok</span>
+<span class="text-xs font-bold text-primary">$2,900 Profit</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary/60 h-full rounded-full" style="width: 65%;"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-1">65% Profitability Index</p>
+</div>
+<!-- Item 5 -->
+<div>
+<div class="flex justify-between items-center mb-1">
+<span class="text-sm font-semibold">Mango Sticky Rice</span>
+<span class="text-xs font-bold text-primary">$1,500 Profit</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden">
+<div class="bg-primary/40 h-full rounded-full" style="width: 45%;"></div>
+</div>
+<p class="text-[10px] text-slate-500 mt-1">45% Profitability Index</p>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-primary text-xs font-bold hover:bg-primary/5 rounded-lg transition-colors">
+                    View Full Inventory Analysis
+                </button>
+</div>
+</div>
+<!-- Recent Transactions/Alerts Table -->
+<div class="mt-8 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<h3 class="font-bold">Operational Insights</h3>
+<span class="text-xs text-slate-500">Live Updates</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50 text-[10px] uppercase tracking-wider text-slate-500 font-bold">
+<th class="px-6 py-3">Source</th>
+<th class="px-6 py-3">Message</th>
+<th class="px-6 py-3">Status</th>
+<th class="px-6 py-3">Time</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="text-sm">
+<td class="px-6 py-4 font-semibold">Kitchen Display</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Order #2045 bottlenecked (15m delay)</td>
+<td class="px-6 py-4"><span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-[10px] font-bold rounded">Critical</span></td>
+<td class="px-6 py-4 text-xs text-slate-500">2 mins ago</td>
+</tr>
+<tr class="text-sm">
+<td class="px-6 py-4 font-semibold">Inventory</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Low stock alert: Shoyu Sauce (2L remaining)</td>
+<td class="px-6 py-4"><span class="px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-[10px] font-bold rounded">Warning</span></td>
+<td class="px-6 py-4 text-xs text-slate-500">12 mins ago</td>
+</tr>
+<tr class="text-sm">
+<td class="px-6 py-4 font-semibold">Sales</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Daily goal (80%) reached</td>
+<td class="px-6 py-4"><span class="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 text-[10px] font-bold rounded">Milestone</span></td>
+<td class="px-6 py-4 text-xs text-slate-500">45 mins ago</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</div>
+</body></html>
